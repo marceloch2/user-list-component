@@ -39,7 +39,7 @@ Before write my markup i've checked for the most semantic element, as always i c
 ``` bash
 <section><header><main><footer>
 ```
-But reading the comments about the Section semantic we can see that it will not be the best element as we don't have a Header and the list don't represent a section of big information related to the entire app, so better keep simple.
+But reading the comments about the Section semantic we can see that it will not be the best element as we don't have a H1, H2, H3,..., and the list don't represent a section of big information related to the entire app, so better keep simple.
 
 http://html5doctor.com/the-section-element
 

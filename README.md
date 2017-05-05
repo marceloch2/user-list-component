@@ -20,6 +20,10 @@ npm run unit
 ```
 I like React and Vue.js, i chose Vue.js for simplicity with one file component. I could split it in many small components but to show my logic behind lazy load you guys can check my code in just one place.
 
+If need change now much items per load just change the prop in the component declaration.
+
+<users :token='token' :fields='fields' :end-point="this.endpoint" :limit="9999999" />
+
 To show my skills i did my interface without use bootstrap or alike, i did vanilla js debounce, not underscore, lodash or jquery. My media-query with pure scss without grid system and used flex-box to better alignment when resizing.
 
 I did my list with lazy-load checking for mouse wheel with a wheelDelta intense pressure number, after some test i got a good usability i think, avoiding user to get more results when he is just trying to check the end of the first list and not loading more.

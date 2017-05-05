@@ -1,0 +1,148 @@
+@import "Font";
+@import "Defaults";
+
+.search-tool {
+    width: 100%;
+    text-align: right;
+    margin-bottom: 30px;
+    position: relative;
+    right: 100px;
+
+    i {
+        position: absolute;
+        right: 20px;
+        top: 12px;
+        color: $color-grey;
+    }
+
+    input {
+        padding: 10px 50px 10px 30px;
+        border: solid 1px #333;
+
+        border: none;
+        border-radius: 30px;
+        border: solid 1px #eee;
+        font-size: 0.9rem;
+    }
+}
+
+.tabs-holder {
+    text-align: right;
+    margin-bottom: 15px;
+
+    .tabs {
+        li {
+            display: inline;
+            margin-right: 30px;
+            a {
+                color: $color-grey;
+                font-family: 'Gill Sans';
+                text-decoration: none;
+                font-weight: normal;
+                font-size: 1.1rem;
+
+                &:hover {
+                    color: $color-blue;
+                    border-bottom: $color-blue solid 3px;
+                }
+            }
+        }
+
+        .active {
+            color: $color-blue;
+            border-bottom: $color-blue solid 3px;
+            font-weight: 600;
+        }
+    }
+}
+
+.user-row {
+    font-family: 'Gill Sans';
+    background: #fff;
+    max-width: 80%;
+    margin: 0 auto;
+    padding-bottom: 2px;
+
+    .wrapper {
+        box-shadow: -1px 1px 1px 2px rgba(238, 238, 238, 0.75);
+        padding: 15px 30px 0 30px;
+    }
+
+    .row {
+        display: flex;
+        align-items: center;
+        min-height: 95px;
+        border-top: solid $border 1px;
+
+        div {
+            display: flex;
+            text-align: left;
+        }
+
+        &:last-child {
+            margin-bottom: 0;
+        }
+
+        .thumbnail {
+            width: 10%;
+            justify-content: center;
+        }
+
+        .user-name {
+            width: 20%;
+            display: block;
+            color: $color-blue-strong;
+
+            .name {
+                font-size: 1.3rem;
+            }
+
+            .email {
+                font-size: 1rem;
+                color: $color-grey;
+            }
+        }
+
+        .membership {
+            width: 15%;
+            display: block;
+            color: $color-grey;
+            font-family: 'Neue Helvetica';
+            font-size: 1rem;
+        }
+
+        .credits {
+            width: 20%;
+            color: $color-blue;
+        }
+
+        .list-buttons {
+            width: 35%;
+            justify-content: flex-end;
+        }
+    }
+}
+
+@media (max-width: 750px) {
+    .user-row {
+        .row {
+            display: flex;
+            flex-direction: column;
+
+            div {
+                margin: 15px 0 30px 0;
+                width: 100%!important;
+                justify-content: center!important;
+                margin-bottom: 10px;
+                text-align: center;
+            }
+        }
+    }
+
+    .tabs {
+        text-align: left;
+        li {
+            display: block!important;
+        }
+    }
+}

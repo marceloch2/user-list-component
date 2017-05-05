@@ -63,6 +63,7 @@
 import store from './store.js';
 import request from 'request';
 import moment from 'moment';
+import isMobile from 'ismobilejs';
 
 export default {
     data () {
@@ -116,10 +117,27 @@ export default {
     },
 
     mounted () {
+        let _self = this;
+
         // Get first batch of users
         this.getUsers();
-        // And attach the listener for mouse wheel scroll
-        document.addEventListener('wheel', this.loadMoreUsers);
+
+        if(!isMobile.any) {
+            // Attach the listener for mouse wheel scroll
+            document.addEventListener('wheel', this.loadMoreUsers);
+        } else {
+            window.addEventListener('scroll', function(e) {
+                if (this.debounceHelper) {
+                    window.clearTimeout(this.debounceHelper);
+                }
+
+                this.debounceHelper = window.setTimeout(() => {
+                    if (_self.checkEndOfPage()) {
+                        _self.getUsers();
+                    }
+                }, 200);
+            });
+        }
     },
 
     methods: {
@@ -161,7 +179,7 @@ export default {
 
             // Check if user reach the end of the page using scroll
             var userRowList = document.getElementsByTagName("body");
-            if (!this.init && !this.checkVisible(userRowList)) { return; }
+            if (!this.init && !this.checkEndOfPage(userRowList)) { return; }
 
             // We have a properly pressure in wheel/scroll
             if (Math.abs(evt.wheelDelta) > 140) {
@@ -203,11 +221,13 @@ export default {
                 json: true
             }, (error, response, body) => {
                 if (!error) {
+                    // No results from request
                     if (!body.length) {
                         _self.loading = false;
                         _self.noMoreResults = true;
                         return;
                     }
+                    // Ok we have users, push to our data object
                     for (var item in body) {
                         if (body.hasOwnProperty(item)) {
                             _self.users.push(body[item]);
@@ -222,8 +242,9 @@ export default {
             }).auth(null, null, true, this.token);
         },
 
-        checkVisible(elem) {
+        checkEndOfPage(elem) {
             if ((window.innerHeight + window.pageYOffset) >= document.body.offsetHeight) {
+
                 return true;
             }
         }

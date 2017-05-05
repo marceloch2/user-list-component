@@ -1,5 +1,5 @@
 <template>
-    <users :token='token' :fields='fields' :end-point="this.endpoint" :limit="5" />
+    <users :token='token' :fields='fields' :end-point="this.endpoint" :limit="2" />
 </template>
 
 <script>

@@ -35,7 +35,11 @@ npm run unit
 
 ```
 
-Before write my markup i've checked for the most semantic element, as always i could just start with <section><header><main><footer>, etc..., but reading the comments about the Section semantic we can see that it will not be the best element as we don't have a Header and the list don't represent a section of big information related to the entire app, so better keep simple.
+Before write my markup i've checked for the most semantic element, as always i could just start with
+``` bash
+<section><header><main><footer>
+```
+But reading the comments about the Section semantic we can see that it will not be the best element as we don't have a Header and the list don't represent a section of big information related to the entire app, so better keep simple.
 
 http://html5doctor.com/the-section-element
 

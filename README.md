@@ -20,12 +20,11 @@ npm run unit
 ```
 I like React and Vue.js, i chose Vue.js for simplicity with one file component. I could split it in many small components but to show my logic behind lazy load you guys can check my code in just one place.
 
-If need change now much items per load just change the prop in the component declaration.
+If need change how much items per load just change the prop in the component declaration.
+<users :token='token' :fields='fields' :end-point="this.endpoint" :limit="XXX" />
 
 Also check the mobile interface accessing in your device your external IP on port :8080.
 ex: 192.168.x.x:8080
-
-<users :token='token' :fields='fields' :end-point="this.endpoint" :limit="9999999" />
 
 To show my skills i did my interface without use bootstrap or alike, i did vanilla js debounce, not underscore, lodash or jquery. My media-query with pure scss without grid system and used flex-box to better alignment when resizing.
 

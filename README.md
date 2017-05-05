@@ -8,7 +8,7 @@ npm install
 
 # run e2e tests
 # I did the 2e2 test using testCafe instead nightwatch.js
-# This is fun, check the test for Resize in Iphone 6 size happening :)
+# This is fun, run the command and wait to check all your browsers resize to iphone 6 size and do the test for my responsiveness.
 npm run test-cafe
 
 # serve with hot reload at localhost:8080

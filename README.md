@@ -19,7 +19,7 @@ npm run unit
 
 ```
 
-To show my skills i did not used bootstrap or alike, i did vanilla js debounce, not underscore, lodash or jquery. My media-query with pure scss without grid system and used flex-box to better alignment when resizing.
+To show my skills i did my interface without use bootstrap or alike, i did vanilla js debounce, not underscore, lodash or jquery. My media-query with pure scss without grid system and used flex-box to better alignment when resizing.
 
 I did my list with lazy-load checking for mouse wheel with a wheelDelta intense pressure number, after some test i got a good usability i think, avoiding user to get more results when he is just trying to check the end of the first list and not loading more.
 

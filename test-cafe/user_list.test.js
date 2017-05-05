@@ -38,5 +38,5 @@ test('Fill search input and check if results appear and have 5 items', async t =
     await t
         .typeText(searchInput, 'John')
         .pressKey('enter')
-        .expect(usersListCount).eql(5);
+        .expect(usersListCount).eql(10);
 });

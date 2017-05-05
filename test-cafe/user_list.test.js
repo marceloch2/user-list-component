@@ -18,7 +18,7 @@ test('Check user list exist', async t => {
 test('Check user list have 5 initial items', async t => {
     const usersListCount = Selector('.row').count;
 
-    await t.expect(usersListCount).eql(5);
+    await t.expect(usersListCount).eql(10);
 });
 
 test('Simulate iPhone 6 and check if responsiveness will work for user list media-query', async t => {

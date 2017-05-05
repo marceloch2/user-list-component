@@ -67,6 +67,7 @@ import moment from 'moment';
 export default {
     data () {
         return {
+            init: true,
             start: 0,
             noMoreResults: false,
             shouldLoadMore: false,
@@ -118,7 +119,7 @@ export default {
         // Get first batch of users
         this.getUsers();
         // And attach the listener for mouse wheel scroll
-        document.addEventListener('wheel', this.loadMoreUsers, this.loadMoreUsers);
+        document.addEventListener('wheel', this.loadMoreUsers);
     },
 
     methods: {
@@ -153,9 +154,14 @@ export default {
         loadMoreUsers (evt) {
             let _self = this;
 
+            // Have no results
             if (_self.noMoreResults) {
                 return;
             }
+
+            // Check if user reach the end of the page using scroll
+            var userRowList = document.getElementsByTagName("body");
+            if (!this.init && !this.checkVisible(userRowList)) { return; }
 
             // We have a properly pressure in wheel/scroll
             if (Math.abs(evt.wheelDelta) > 140) {
@@ -180,6 +186,8 @@ export default {
                     _self.shouldLoadMore = false;
                     // And get more users...
                     _self.getUsers();
+                    // Ok, we're not in the first interaction anymore
+                    if (_self.init) _self.init = false;
                 }
             }, 200);
         },
@@ -214,14 +222,9 @@ export default {
             }).auth(null, null, true, this.token);
         },
 
-        // TODO Just allow load more users if at the bottom of the page and
-        // try to add a loader gif when scrolling down
-        checkVisible(elm) {
-            if (elm) {
-                var rect = elm.getBoundingClientRect();
-                var viewHeight = Math.max(document.documentElement.clientHeight, window.innerHeight);
-
-                return !(rect.bottom < 0 || rect.top - viewHeight >= 0);
+        checkVisible(elem) {
+            if ((window.innerHeight + window.pageYOffset) >= document.body.offsetHeight) {
+                return true;
             }
         }
     }

@@ -26,6 +26,8 @@ If need change how much items per load just change the prop in the component dec
 Also check the mobile interface accessing in your device your external IP on port :8080.
 ex: 192.168.x.x:8080
 
+Remember to do the test searching for "John" and scrolling for more results to see the treatment for "no results - clean filters".
+
 To show my skills i did my interface without use bootstrap or alike, i did vanilla js debounce, not underscore, lodash or jquery. My media-query with pure scss without grid system and used flex-box to better alignment when resizing.
 
 I did my list with lazy-load checking for mouse wheel with a wheelDelta intense pressure number, after some test i got a good usability i think, avoiding user to get more results when he is just trying to check the end of the first list and not loading more.

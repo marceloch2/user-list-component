@@ -196,6 +196,7 @@ export default {
 
         cleanFilters () {
             try {
+                this.init = true;
                 this.noMoreResults = false;
                 this.fields.search_string = '';
                 this.$refs.searchInput.value = '';

@@ -1,5 +1,8 @@
 <template>
     <div class="user-row">
+        <span class="result-qty">
+            {{start > 0 ? (this.start + this.limit) : this.limit}}
+        </span>
         <div class="search-tool">
             <input type="text" ref="searchInput" placeholder="Search" @change="searchUsers" />
             <i class="fa fa-search" aria-hidden="true"></i>
@@ -49,7 +52,7 @@
             <p><a href="javascript:void(0)" @click="cleanFilters">Clean filters</a></p>
         </div>
 
-        <div class="loading" v-if='loading'>
+        <div class="loading" v-if='loading && !noMoreResults'>
             <div class="spinner">
                 <div class="double-bounce1"></div>
                 <div class="double-bounce2"></div>
@@ -123,9 +126,10 @@ export default {
         this.getUsers();
 
         if(!isMobile.any) {
-            // Attach the listener for mouse wheel scroll
+            // Attach the listener for desktop with mouse wheel scroll
             document.addEventListener('wheel', this.loadMoreUsers);
         } else {
+            // Debounce for mobile screens with scroll event
             window.addEventListener('scroll', function(e) {
                 if (this.debounceHelper) {
                     window.clearTimeout(this.debounceHelper);
@@ -133,6 +137,7 @@ export default {
 
                 this.debounceHelper = window.setTimeout(() => {
                     if (_self.checkEndOfPage()) {
+                        // Get all users
                         _self.getUsers();
                     }
                 }, 200);
@@ -155,6 +160,7 @@ export default {
                 return e;
             }
         },
+
         searchUsers () {
             try {
                 this.noMoreResults = false;
@@ -171,11 +177,6 @@ export default {
 
         loadMoreUsers (evt) {
             let _self = this;
-
-            // Have no results
-            if (_self.noMoreResults) {
-                return;
-            }
 
             // Check if user reach the end of the page using scroll
             var userRowList = document.getElementsByTagName("body");
@@ -198,8 +199,6 @@ export default {
 
             this.debounceHelper = window.setTimeout(() => {
                 if (_self.shouldLoadMore) {
-                    // Increase the number we should start to fetch more users
-                    _self.start = _self.start + _self.limit;
                     // Restart our helper flag
                     _self.shouldLoadMore = false;
                     // And get more users...
@@ -215,8 +214,13 @@ export default {
             // Start loading spinner
             this.loading = true;
 
+            // Have no results
+            if (_self.noMoreResults) {
+                return;
+            }
+
             request.post({
-                url: this.endPoint + this.limit + "/" + (this.start > 0 ? (this.start + this.limit) : this.start),
+                url: this.endPoint + this.limit + "/" + this.start,
                 form: JSON.stringify(this.fields),
                 json: true
             }, (error, response, body) => {
@@ -235,6 +239,9 @@ export default {
                     }
 
                     _self.loading = false;
+                    // Increase the number we should start to fetch more users
+                    _self.start = _self.start + _self.limit;
+
                     // setTimeout(function () { window.scrollTo(0, document.querySelector('.anchor').offsetTop); }, 10);
                 } else {
                     _self.loadText = "Error while loading more results..."

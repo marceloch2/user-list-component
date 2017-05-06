@@ -20,9 +20,15 @@ npm run unit
 ```
 I like React and Vue.js, i chose Vue.js for simplicity with one file component. I could split it in many small components but to show my logic behind lazy load you guys can check my code in just one place.
 
-If need change now much items per load just change the prop in the component declaration.
+If need change how much items per load just change the prop in the component declaration.
+``` bash
+<users :token='token' :fields='fields' :end-point="this.endpoint" :limit="XXX" />
+```
 
-<users :token='token' :fields='fields' :end-point="this.endpoint" :limit="9999999" />
+Check the mobile interface accessing in your device your external IP on port :8080.
+ex: 192.168.x.x:8080
+
+Remember to do the test searching for "John" and scrolling for more results to see the treatment for "no results - clean filters".
 
 To show my skills i did my interface without use bootstrap or alike, i did vanilla js debounce, not underscore, lodash or jquery. My media-query with pure scss without grid system and used flex-box to better alignment when resizing.
 
@@ -50,17 +56,18 @@ But reading the comments about the Section semantic we can see that it will not 
 
 http://html5doctor.com/the-section-element
 
+So for the component to be reused in many projects easily and safe i decide to go with DIV as it will interferer less as possible with the semantic of the host project.
+
+
+The Component SCSS is SCOPED so will never interfere to global style of the host project.
+
+
+
 ####################
 
 If more time what would be better?
 
+- I could use Single State Tree Manager (Vuex, Redux, VanillaJs) with pure function to easy test.
 
-Also for the component to be reused in many projects i decide to go with <div> as it will interferer less as possible with the semantic of the host project.
+- I should make use of BEM for my scss name convention.
 
-I should make use of BEM for my scss name convention.
-
-I have a warning in my chrome but it was explained in this link bellow.
-http://stackoverflow.com/questions/39152877/consider-marking-event-handler-as-passive-to-make-the-page-more-responsive
-[Violation] Added non-passive event listener to a scroll-blocking 'mousewheel' event. Consider marking event handler as 'passive' to make the page more responsive.
-
-I could use Single State Tree Manager (Vuex, Redux, VanillaJs) with pure function to easy test.

@@ -54,7 +54,12 @@ But reading the comments about the Section semantic we can see that it will not 
 
 http://html5doctor.com/the-section-element
 
-So for the component to be reused in many projects i decide to go with DIV as it will interferer less as possible with the semantic of the host project.
+So for the component to be reused in many projects easily and safe i decide to go with DIV as it will interferer less as possible with the semantic of the host project.
+
+
+The Component SCSS is SCOPED so will never interfere to global style of the host project.
+
+
 
 ####################
 

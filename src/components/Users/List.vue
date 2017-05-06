@@ -216,7 +216,7 @@ export default {
             this.loading = true;
 
             request.post({
-                url: this.endPoint + this.limit + "/" + this.start,
+                url: this.endPoint + this.limit + "/" + (this.start > 0 ? (this.start + this.limit) : this.start),
                 form: JSON.stringify(this.fields),
                 json: true
             }, (error, response, body) => {

@@ -1,7 +1,7 @@
 <template>
     <div class="user-row">
-        <span class="result-qty">
-            {{start > 0 ? (this.start + this.limit) : this.limit}}
+        <span class="result-qty" v-if="start > 0">
+            {{Object.keys(this.users).length}}
         </span>
         <div class="search-tool">
             <input type="text" ref="searchInput" placeholder="Search" @change="searchUsers" />

@@ -1,8 +1,6 @@
 <template>
     <div class="user-row">
-        <span class="result-qty" v-if="start > 0">
-            {{Object.keys(this.users).length}}
-        </span>
+        <span class="result-qty" v-if="start > 0">{{Object.keys(this.users).length}}</span>
         <div class="search-tool">
             <input type="text" ref="searchInput" placeholder="Search" @change="searchUsers" />
             <i class="fa fa-search" aria-hidden="true"></i>
@@ -20,9 +18,7 @@
             </div>
 
             <div class="row" v-for='(user, key) in users'>
-                <div class="thumbnail">
-                    <img class="userpicture" src="http://placehold.it/40x40" :alt="user.User.name">
-                </div>
+                <div class="thumbnail"><img class="userpicture" src="http://placehold.it/40x40" :alt="user.User.name"></div>
 
                 <div class="user-name">
                     <p class="name">{{user.User.name}}</p>
@@ -37,12 +33,8 @@
                 </div>
 
                 <div class="list-buttons">
-                    <button type="button" name="button">
-                        Access <i class="fa fa-sign-in" aria-hidden="true"></i>
-                    </button>
-                    <button type="button" name="button">
-                        Book / Buy <i class="fa fa-plus-circle" aria-hidden="true"></i>
-                    </button>
+                    <button type="button" name="button">Access <i class="fa fa-sign-in" aria-hidden="true"></i></button>
+                    <button type="button" name="button">Book / Buy <i class="fa fa-plus-circle" aria-hidden="true"></i></button>
                 </div>
             </div>
         </div>
@@ -83,9 +75,7 @@ export default {
 
     filters : {
         membershipMonths (dateOne, dateTwo) {
-            if (!dateOne) {
-                return "Not a member";
-            }
+            if (!dateOne) { return "Not a member"; }
 
             return moment(dateOne).diff(moment(dateTwo), 'months') + ' Month Membership';
         },
@@ -95,33 +85,15 @@ export default {
         }
     },
 
-    computed : {},
-
     props: {
-        token: {
-            type: String,
-            required: true
-        },
-
-        fields: {
-            type: Object,
-            required: true
-        },
-
-        endPoint: {
-            type: String,
-            required: true
-        },
-
-        limit: {
-            type: Number,
-            required: true
-        }
+        token: { type: String, required: true },
+        fields: { type: Object, required: true },
+        endPoint: { type: String, required: true },
+        limit: { type: Number, required: true }
     },
 
     mounted () {
-        let _self = this;
-
+        var _self = this;
         // Get first batch of users
         this.getUsers();
 
@@ -146,6 +118,82 @@ export default {
     },
 
     methods: {
+        loadMoreUsers : function (evt) {
+            // Check if user reach the end of the page using scroll
+            var userRowList = document.getElementsByTagName("body");
+            if (!this.init && !this.checkEndOfPage(userRowList)) { return; }
+
+            // We have a properly pressure in wheel/scroll
+            if (Math.abs(evt.wheelDelta) > 140) {
+                // Let's set the loading so user see we're working to load more and stop to keep pushing down
+                this.loading = true;
+                // We want to load more
+                this.shouldLoadMore = true;
+            }
+
+            // Check if user keep pushing the scroll frantically:(
+            if (this.debounceHelper) {
+                // Lets clean our timeout, user should be patience,
+                // we're trying to save his data plan
+                window.clearTimeout(this.debounceHelper);
+            }
+
+            this.debounceHelper = window.setTimeout(() => {
+                if (this.shouldLoadMore) {
+                    // Restart our helper flag
+                    this.shouldLoadMore = false;
+                    // And get more users...
+                    this.getUsers();
+                }
+            }, 200);
+        },
+
+        getUsers : function () {
+            // Start loading spinner
+            this.loading = true;
+
+            // Have no results
+            if (this.noMoreResults) {
+                return;
+            }
+
+            request.post({
+                url: this.endPoint + this.limit + "/" + this.start,
+                form: JSON.stringify(this.fields),
+                json: true
+            }, (error, response, body) => {
+                if (!error) {
+                    // No results from request
+                    if (!body.length) {
+                        this.loading = false;
+                        this.noMoreResults = true;
+                        return;
+                    }
+
+                    if (!this.init) {
+                        window.scrollBy({
+                            top: 300,
+                            left: 0,
+                            behavior: 'smooth'
+                        });
+                    }
+
+                    // Ok we have users, spread the result to ours users
+                    this.users.push(...body);
+
+                    this.loading = false;
+                    // Increase the number we should start to fetch more users
+                    this.start = this.start + this.limit;
+                    // Ok, we're not in the first interaction anymore
+                    if (this.init) this.init = false;
+
+                    // setTimeout(function () { window.scrollTo(0, document.querySelector('.anchor').offsetTop); }, 10);
+                } else {
+                    this.loadText = "Error while loading more results..."
+                }
+            }).auth(null, null, true, this.token);
+        },
+
         cleanFilters () {
             try {
                 this.noMoreResults = false;
@@ -175,83 +223,8 @@ export default {
             }
         },
 
-        loadMoreUsers (evt) {
-            let _self = this;
-
-            // Check if user reach the end of the page using scroll
-            var userRowList = document.getElementsByTagName("body");
-            if (!this.init && !this.checkEndOfPage(userRowList)) { return; }
-
-            // We have a properly pressure in wheel/scroll
-            if (Math.abs(evt.wheelDelta) > 140) {
-                // Let's set the loading so user see we're working to load more and stop to keep pushing down
-                this.loading = true;
-                // We want to load more
-                this.shouldLoadMore = true;
-            }
-
-            // Check if user keep pushing the scroll frantically:(
-            if (this.debounceHelper) {
-                // Lets clean our timeout, user should be patience,
-                // we're trying to save his data plan
-                window.clearTimeout(this.debounceHelper);
-            }
-
-            this.debounceHelper = window.setTimeout(() => {
-                if (_self.shouldLoadMore) {
-                    // Restart our helper flag
-                    _self.shouldLoadMore = false;
-                    // And get more users...
-                    _self.getUsers();
-                    // Ok, we're not in the first interaction anymore
-                    if (_self.init) _self.init = false;
-                }
-            }, 200);
-        },
-
-        getUsers () {
-            var _self = this;
-            // Start loading spinner
-            this.loading = true;
-
-            // Have no results
-            if (_self.noMoreResults) {
-                return;
-            }
-
-            request.post({
-                url: this.endPoint + this.limit + "/" + this.start,
-                form: JSON.stringify(this.fields),
-                json: true
-            }, (error, response, body) => {
-                if (!error) {
-                    // No results from request
-                    if (!body.length) {
-                        _self.loading = false;
-                        _self.noMoreResults = true;
-                        return;
-                    }
-                    // Ok we have users, push to our data object
-                    for (var item in body) {
-                        if (body.hasOwnProperty(item)) {
-                            _self.users.push(body[item]);
-                        }
-                    }
-
-                    _self.loading = false;
-                    // Increase the number we should start to fetch more users
-                    _self.start = _self.start + _self.limit;
-
-                    // setTimeout(function () { window.scrollTo(0, document.querySelector('.anchor').offsetTop); }, 10);
-                } else {
-                    _self.loadText = "Error while loading more results..."
-                }
-            }).auth(null, null, true, this.token);
-        },
-
         checkEndOfPage(elem) {
             if ((window.innerHeight + window.pageYOffset) >= document.body.offsetHeight) {
-
                 return true;
             }
         }

@@ -21,7 +21,9 @@ npm run unit
 I like React and Vue.js, i chose Vue.js for simplicity with one file component. I could split it in many small components but to show my logic behind lazy load you guys can check my code in just one place.
 
 If need change how much items per load just change the prop in the component declaration.
+``` bash
 <users :token='token' :fields='fields' :end-point="this.endpoint" :limit="XXX" />
+```
 
 Check the mobile interface accessing in your device your external IP on port :8080.
 ex: 192.168.x.x:8080

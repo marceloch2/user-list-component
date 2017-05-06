@@ -1,6 +1,6 @@
 <template>
     <div class="user-row">
-        <span class="result-qty" v-if="start > 0">{{Object.keys(this.users).length}}</span>
+        <span class="result-qty" v-if="start > 0">{{ Object.keys(this.users).length }}</span>
         <div class="search-tool">
             <input type="text" ref="searchInput" placeholder="Search" @change="searchUsers" />
             <i class="fa fa-search" aria-hidden="true"></i>
@@ -38,8 +38,7 @@
                 </div>
             </div>
         </div>
-
-        <div class="no-results" v-if="noMoreResults">
+        <div class="no-results" v-if="noMoreResults || (users.length > 0 && users.length < limit)">
             No more results
             <p><a href="javascript:void(0)" @click="cleanFilters">Clean filters</a></p>
         </div>
@@ -103,15 +102,11 @@ export default {
         } else {
             // Debounce for mobile screens with scroll event
             window.addEventListener('scroll', function(e) {
-                if (this.debounceHelper) {
-                    window.clearTimeout(this.debounceHelper);
-                }
+                if (this.debounceHelper) { window.clearTimeout(this.debounceHelper); }
 
                 this.debounceHelper = window.setTimeout(() => {
-                    if (_self.checkEndOfPage()) {
-                        // Get all users
-                        _self.getUsers();
-                    }
+                    // If page bottom get all users...
+                    if (_self.checkEndOfPage()) { _self.getUsers(); }
                 }, 200);
             });
         }
@@ -170,7 +165,7 @@ export default {
                         return;
                     }
 
-                    if (!this.init) {
+                    if (!this.init || isMobile.any) {
                         window.scrollBy({
                             top: 300,
                             left: 0,
@@ -186,10 +181,8 @@ export default {
                     this.start = this.start + this.limit;
                     // Ok, we're not in the first interaction anymore
                     if (this.init) this.init = false;
-
-                    // setTimeout(function () { window.scrollTo(0, document.querySelector('.anchor').offsetTop); }, 10);
                 } else {
-                    this.loadText = "Error while loading more results..."
+                    this.loadText = "Error loading more results..."
                 }
             }).auth(null, null, true, this.token);
         },
@@ -198,11 +191,11 @@ export default {
             try {
                 this.init = true;
                 this.noMoreResults = false;
-                this.fields.search_string = '';
-                this.$refs.searchInput.value = '';
+                this.fields.search_string = this.$refs.searchInput.value = '';
                 this.start = 0;
                 this.users = [];
-                this.getUsers();
+
+                if(!isMobile.any) { this.getUsers(); }
 
                 return true;
             } catch (e) {
@@ -212,6 +205,7 @@ export default {
 
         searchUsers () {
             try {
+                this.init = true;
                 this.noMoreResults = false;
                 this.fields.search_string = this.$refs.searchInput.value;
                 this.users = [];
